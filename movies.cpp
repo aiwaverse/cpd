@@ -14,7 +14,7 @@ void Database::hash_insert(const std::vector<std::string>& genre_list, unsigned 
 }
 
 void Database::read_movie_file(void) {
-    std::ifstream movie("../Dados/movie.csv");
+    std::ifstream movie("Dados/movie.csv");
     if (not movie) {
         throw std::runtime_error("Incorrect movie.csv file");
     }
@@ -36,14 +36,13 @@ void Database::read_movie_file(void) {
 
 void Database::read_ratings_file(void) {
     using namespace std::chrono;
-    std::ifstream rating("../Dados/rating.csv");  //change this to test the full file
+    std::ifstream rating("Dados/rating.csv");  //change this to test the full file
     if (not rating) {
         throw std::runtime_error("Incorrect rating.csv file");
     }
     std::string file_line{};
     std::getline(rating, file_line);  //get the first dumb line
     file_line.clear();
-    unsigned i{};
     while (std::getline(rating, file_line)) {
         int user_id{};
         int movie_id{};

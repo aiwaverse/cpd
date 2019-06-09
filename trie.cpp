@@ -22,7 +22,7 @@ void basic_node::find(std::string& s) {
 }
 void basic_node::_find(std::string& modified) {
     if (modified.size() > 0) {
-        int c{convert_c(modified[c])};
+        int c{convert_c(modified[0])};
         modified.erase(modified.begin());
         if (next_nodes[c] != nullptr) {
             next_nodes[c]->_find(modified);
