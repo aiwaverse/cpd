@@ -37,7 +37,9 @@ void basic_node::cycle_array(void) {
     for (auto& ptr : next_nodes) {
         if (ptr) {
             if (ptr->is_word) {
-                std::cout << dynamic_cast<leaf_node*>(ptr.get())->word << "\n";
+                auto word = dynamic_cast<leaf_node*>(ptr.get())->word;
+                auto id = dynamic_cast<leaf_node*>(ptr.get())->user_id;
+                _infos.push_back({word, id});
             }
             ptr->cycle_array();
         }

@@ -62,7 +62,7 @@ movie_data Hash_Table::find(size_t to_find) {
 
 void Hash_Table::add_rating(size_t to_find, double rating) {
     size_t i{0};
-    size_t key{to_find};
+    size_t key{hash(to_find)};
     auto o_key{key};
     size_t pos{key % table.size()};
     while (table[pos].used() == true) {

@@ -2,9 +2,13 @@
 #include <array>
 #include <memory>
 #include <string>
+#include <vector>
 
 namespace trie {
 class basic_node {
+   private:
+    static std::vector<std::pair<std::string, unsigned>> _infos;
+
    protected:
     std::array<std::unique_ptr<basic_node>, 36> next_nodes{};
     bool is_word{false};
@@ -18,6 +22,8 @@ class basic_node {
     void find(std::string&);
     void _find(std::string& modified);
     void insert(std::string& word, unsigned id);
+    void clear(void) { _infos.clear(); };
+    std::vector<std::pair<std::string, unsigned>> infos(void) { return _infos; };
     virtual void _insert(std::string& modified, const std::string& original, unsigned id);
     virtual ~basic_node(){};
 };
@@ -31,4 +37,5 @@ class leaf_node : public basic_node {
     leaf_node(){};
     virtual ~leaf_node(){};
 };
+inline std::vector<std::pair<std::string, unsigned>> basic_node::_infos{};  //static member initialization
 }  // namespace trie

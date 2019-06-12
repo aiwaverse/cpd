@@ -47,30 +47,73 @@ void Database::read_ratings_file(void) {
         int user_id{};
         int movie_id{};
         double movie_rating{};
-        fill_rating_field(file_line,user_id, movie_id, movie_rating);
-        movie_data.add_rating(movie_id, movie_rating);        //add the read rating on the hash
-        ratings.insert(user_id - 1, movie_id, movie_rating);  //add the new rating to the ordered array
+        fill_rating_field(file_line, user_id, movie_id, movie_rating);
+        movie_data.add_rating(movie_id, movie_rating);    //add the read rating on the hash
+        ratings.insert(user_id, movie_id, movie_rating);  //add the new rating to the ordered array
     }
     rating.close();
 }
 
-inline void fill_rating_field(std::string& s, int& user_id, int& movie_id, double& rating){
-        std::istringstream iss{s};
-        std::string token{};
-        std::getline(iss, token, ',');
-        user_id = std::stoi(token);
-        iss.clear();
-        iss.str(token);
-        std::getline(iss, token, ',');
-        movie_id = std::stoi(token);
-        iss.clear();
-        iss.str(token);
-        std::getline(iss, token, ',');
-        rating = std::stod(token);
+inline void fill_rating_field(std::string& s, int& user_id, int& movie_id, double& rating) {
+    std::istringstream iss{s};
+    std::string token{};
+    std::getline(iss, token, ',');
+    user_id = std::stoi(token);
+    iss.clear();
+    iss.str(s.substr(token.size() + 1));
+    auto sz = token.size() + 1;
+    std::getline(iss, token, ',');
+    movie_id = std::stoi(token);
+    iss.clear();
+    iss.str(s.substr(token.size() + 1 + sz));
+    std::getline(iss, token, ',');
+    rating = std::stod(token);
 }
 
 void Database::search_word(std::string& s) {
+    movie_names.clear();
     movie_names.find(s);
+    print_search(movie_names.infos());
+}
+void Database::print_search(std::vector<std::pair<std::string, unsigned>> vec) {
+    using std::cout;
+    using std::setw;
+    std::cout.precision(6);
+    std::cout << std::fixed;
+    cout << setw(6) << "id"
+         << "  " << setw(40) << std::right << "movie name" << setw(36) << "  " << std::right << "Genres" << "  " << setw(8) << "Rating"
+         << "   " << setw(7) << "Count\n";
+    //can i do this?
+    std::sort(vec.begin(), vec.end(), 
+    [](const std::pair<std::string, unsigned>& a, const std::pair<std::string, unsigned>& b){
+        return a.second < b.second;
+    });
+    for (auto& movie : vec) {
+        auto current_movie_hash = movie_data.find(movie.second);
+        cout << setw(6) << movie.second << "  "
+             << setw(40) << std::right << string_print(movie.first) << "  ";
+        std::string all_genres{};
+        for (auto& genres : current_movie_hash.genres) {
+            all_genres += genres;
+            all_genres += "|";
+        }
+        auto grade {(current_movie_hash.all_ratings / current_movie_hash.number_of_ratings)};
+        if (current_movie_hash.number_of_ratings == 0)
+            grade = 0;
+        cout << setw(40) << std::right << all_genres << "  ";
+        cout << setw(7) << grade << "  " << setw(7) << current_movie_hash.number_of_ratings;
+        cout << "\n";
+    }
+}
+
+std::string string_print(const std::string& s) {
+    if (s.size() < 40)
+        return s;
+    std::string new_s{};
+    for (auto i{0U}; i < 37; ++i)
+        new_s += s[i];
+    new_s += "...";
+    return new_s;
 }
 
 std::string parse_line(const std::string& s, unsigned info) {
