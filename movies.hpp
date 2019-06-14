@@ -26,5 +26,5 @@ std::string parse_line(const std::string& s, unsigned info);
 void clear_buffer(void);
 std::string unquote( const std::string& s );
 std::vector<std::string> make_string_vector(const std::string& s);
-inline void fill_rating_field(std::string& s, int& user_id, int& movie_id, double& rating);
+void fill_rating_field(std::string& s, int& user_id, int& movie_id, double& rating);
 std::string string_print(const std::string& s);

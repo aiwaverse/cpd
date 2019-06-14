@@ -54,20 +54,28 @@ void Database::read_ratings_file(void) {
     rating.close();
 }
 
-inline void fill_rating_field(std::string& s, int& user_id, int& movie_id, double& rating) {
-    std::istringstream iss{s};
-    std::string token{};
-    std::getline(iss, token, ',');
-    user_id = std::stoi(token);
-    iss.clear();
-    iss.str(s.substr(token.size() + 1));
-    auto sz = token.size() + 1;
-    std::getline(iss, token, ',');
-    movie_id = std::stoi(token);
-    iss.clear();
-    iss.str(s.substr(token.size() + 1 + sz));
-    std::getline(iss, token, ',');
-    rating = std::stod(token);
+void fill_rating_field(std::string& s, int& user_id, int& movie_id, double& rating) {
+    int i{};
+    std::string fields{};
+    while (s[i] != ',') {
+        fields += s[i];
+        ++i;
+    }
+    user_id = std::stoi(fields);
+    fields.clear();
+    ++i;
+    while (s[i] != ',') {
+        fields += s[i];
+        ++i;
+    }
+    movie_id = std::stoi(fields);
+    fields.clear();
+    ++i;
+    while (s[i] != ',') {
+        fields += s[i];
+        ++i;
+    }
+    rating = std::stod(fields);
 }
 
 void Database::search_word(std::string& s) {
@@ -81,13 +89,14 @@ void Database::print_search(std::vector<std::pair<std::string, unsigned>> vec) {
     std::cout.precision(6);
     std::cout << std::fixed;
     cout << setw(6) << "id"
-         << "  " << setw(40) << std::right << "movie name" << setw(36) << "  " << std::right << "Genres" << "  " << setw(8) << "Rating"
+         << "  " << setw(40) << std::right << "movie name" << setw(36) << "  " << std::right << "Genres"
+         << "  " << setw(8) << "Rating"
          << "   " << setw(7) << "Count\n";
     //can i do this?
-    std::sort(vec.begin(), vec.end(), 
-    [](const std::pair<std::string, unsigned>& a, const std::pair<std::string, unsigned>& b){
-        return a.second < b.second;
-    });
+    std::sort(vec.begin(), vec.end(),
+              [](const std::pair<std::string, unsigned>& a, const std::pair<std::string, unsigned>& b) {
+                  return a.second < b.second;
+              });
     for (auto& movie : vec) {
         auto current_movie_hash = movie_data.find(movie.second);
         cout << setw(6) << movie.second << "  "
@@ -97,7 +106,7 @@ void Database::print_search(std::vector<std::pair<std::string, unsigned>> vec) {
             all_genres += genres;
             all_genres += "|";
         }
-        auto grade {(current_movie_hash.all_ratings / current_movie_hash.number_of_ratings)};
+        auto grade{(current_movie_hash.all_ratings / current_movie_hash.number_of_ratings)};
         if (current_movie_hash.number_of_ratings == 0)
             grade = 0;
         cout << setw(40) << std::right << all_genres << "  ";
