@@ -5,6 +5,14 @@
 #include <iomanip>
 #include <limits>
 
+Database::Database(std::string file_name){
+    std::cout << "Starting trie construction:\n";
+    read_movie_file();
+    std::cout << "Trie finished construction:\n";
+    std::cout << "Starting hash construction:\n";
+    read_ratings_file(file_name);
+    std::cout << "Hash finished construction:\n";
+}
 void Database::tree_insert(std::string& s, unsigned id) {
     movie_names.insert(s, id);
 }
@@ -34,9 +42,8 @@ void Database::read_movie_file(void) {
     movie.close();
 }
 
-void Database::read_ratings_file(void) {
-    using namespace std::chrono;
-    std::ifstream rating("Dados/rating.csv");  //change this to test the full file
+void Database::read_ratings_file(std::string rating_file) {
+    std::ifstream rating(rating_file);  //change this to test the full file
     if (not rating) {
         throw std::runtime_error("Incorrect rating.csv file");
     }
