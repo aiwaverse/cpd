@@ -2,11 +2,13 @@
 #include <iostream>
 #include <limits>
 #include "movies.hpp"
+#include "tags.hpp"
 
 int main(int argc, char* argv[]) {
     using namespace std::chrono;
-    Database test{};
-    char op{};
+    /*Database test{};
+    test.read_tags_file();
+     char op{};
     do{
         std::cout << "Y for another read, N to leave\n";
         std::cin >> op;
@@ -19,7 +21,7 @@ int main(int argc, char* argv[]) {
             system("clear");
             test.search_word(search);
         }
-    }while(op != 'N');
+    }while(op != 'N');*/
     std::cout << "Aiwa thanks you <3 \n";
     return 0;
 }

@@ -2,6 +2,7 @@
 #include "openadr.hpp"
 #include "ordered.hpp"
 #include "trie.hpp"
+#include "tags.hpp"
 #include <sstream>
 
 class Database {
@@ -10,12 +11,12 @@ class Database {
     trie::basic_node movie_names{};
     open::Hash_Table movie_data{};
     ordered::Users ratings{};
-    void tree_insert(std::string& s, unsigned id);
-    void hash_insert(const std::vector<std::string>& genre_list, unsigned movie_id);
-    void array_insert(size_t user, unsigned movie_id, double rating);
+    tag::Hash_Table movie_tags{};
     void read_movie_file(void);
     void read_ratings_file(std::string rating_file);
+
    public:
+    void read_tags_file(void);
     Database(std::string file_name = default_ratings_file);
     void search_word(std::string& s);
     void print_search(std::vector<std::pair<std::string, unsigned>>);

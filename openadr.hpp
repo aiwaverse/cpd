@@ -58,9 +58,7 @@ class Hash_Table {
     size_t double_probing(size_t, const unsigned);  //double probing and not double hashing to keep a pattern
     unsigned hash(unsigned);
     unsigned unhash(unsigned x);
-
    public:
-
     Hash_Table() { table.resize(size_of_table); }
     Hash_Table(const Hash_Table&) = default;
     Hash_Table(Hash_Table&&) = default;
