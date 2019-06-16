@@ -16,7 +16,11 @@ void choose_query(const std::string& first, const std::string& line, Database& o
         std::string number{};
         for (size_t i{pos}; i < first.size(); ++i)
             number += first.at(i);
+        try{
         topN_query(line, std::stoi(number), obj);
+        }catch(std::invalid_argument){
+            std::cout << "Please check the top<N> syntax\n";
+        }
     } else
         return;
 }

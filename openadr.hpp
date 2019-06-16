@@ -12,7 +12,6 @@ struct movie_data {
     unsigned number_of_ratings{};
     double all_ratings{};
     std::vector<std::string> genres{};
-    std::vector<std::string> genres_low{};
     std::string name{};
     friend std::ostream& operator<<(std::ostream& os,const movie_data& rhs);
 };

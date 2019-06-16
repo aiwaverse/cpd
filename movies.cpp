@@ -39,10 +39,7 @@ void Database::read_movie_file(void) {
         std::string genres{parse_genres(movie_string)};
         genres = unquote(genres);
         auto genre_list{make_string_vector(genres)};
-        std::string genres_low{};
-        std::transform(genres.begin(), genres.end(), std::back_inserter(genres_low), ::tolower);
-        auto genre_cap {make_string_vector(genres_low)};
-        open::movie_data data{0, 0, genre_list, genre_cap, name};
+        open::movie_data data{0, 0, genre_list, name};
         movie_data.insert(data, id);
     }
     movie.close();
@@ -140,9 +137,14 @@ void Database::search_user(unsigned id) {
 
 void Database::search_top(const std::string& genre, unsigned n) {
     std::priority_queue<std::pair<double, unsigned>> top_movies{};
-    for (unsigned i{}; i < 36529; ++i) {
+    for (unsigned i{}; i < 131262; ++i) {
         auto curr_movie = movie_data.find(i);
-        if ((curr_movie.number_of_ratings>=20) and (std::find(curr_movie.genres_low.begin(), curr_movie.genres_low.end(), genre) != curr_movie.genres_low.end())) {
+        std::string temp{};
+        for(auto each : curr_movie.genres)
+            temp+=(each)+" ";
+        std::string genres_low{};
+        std::transform(temp.begin(), temp.end(), std::back_inserter(genres_low), ::tolower);
+        if ((curr_movie.number_of_ratings>=20) and (genres_low.find(genre) != std::string::npos)) {
             auto curr_grade = curr_movie.all_ratings/curr_movie.number_of_ratings;
             top_movies.push(std::make_pair(curr_grade, i));
         }
@@ -164,14 +166,15 @@ void Database::print_search(std::vector<std::pair<std::string, unsigned>> vec) {
     std::cout << std::fixed;
     cout << setw(8) << "id"
          << " " << setw(44) << std::right << "movie name"
-         << "  " << setw(48) << std::right << "Genres"
+         << "  " << setw(68) << std::right << "Genres"
          << " " << setw(9) << "Rating"
          << " " << setw(10) << "Count\n";
     //can i do this?
-    std::sort(vec.begin(), vec.end(),
+    /*std::sort(vec.begin(), vec.end(),
               [](const std::pair<std::string, unsigned>& a, const std::pair<std::string, unsigned>& b) {
                   return a.second < b.second;
-              });
+              });*/
+    shellsort_ciura_basic(vec);
     for (auto& movie : vec) {
         auto current_movie_hash = movie_data.find(movie.second);
         cout << setw(8) << movie.second
@@ -184,7 +187,7 @@ void Database::print_search(std::vector<std::pair<std::string, unsigned>> vec) {
         auto grade{(current_movie_hash.all_ratings / current_movie_hash.number_of_ratings)};
         if (current_movie_hash.number_of_ratings == 0)
             grade = 0;
-        cout << setw(50) << std::right << all_genres;
+        cout << setw(70) << std::right << all_genres;
         cout << setw(10) << grade << setw(10) << current_movie_hash.number_of_ratings;
         cout << "\n";
     }
@@ -194,6 +197,7 @@ void Database::print_search(const std::vector<unsigned>& movies) {
     using std::setw;
     std::cout.precision(6);
     std::cout << std::fixed;
+    std::cout << "   ";
     std::cout << setw(40) << "Movie name"
               << "  " << setw(70) << "Genres"
               << "  "
@@ -201,7 +205,7 @@ void Database::print_search(const std::vector<unsigned>& movies) {
               << "  " << setw(8) << "Count\n";
     for (auto& m : movies) {
         auto curr{movie_data.find(m)};
-        std::cout << setw(40) << string_print(curr.name) << "  ";
+        std::cout << "   " << setw(40) << string_print(curr.name) << "  ";
         std::string all_genres{};
         for (auto& g : curr.genres) {
             all_genres += g;
@@ -216,11 +220,11 @@ void Database::print_search(const std::vector<unsigned>& movies) {
 
 void Database::search_tag(const std::vector<std::string>& tags) {
     auto m1 = movie_tags.find(tags.at(0));
-    std::sort(m1.begin(), m1.end());
+    shellsort_ciura_basic(m1);
     std::vector<unsigned> m2{};
     for (unsigned i{1}; i < tags.size(); ++i) {
         auto m3 = movie_tags.find(tags.at(i));
-        std::sort(m3.begin(), m3.end());
+        shellsort_ciura_basic(m3);
         //any non-stupid person would use the stl set intersection, but y'know, rules are rules
         m2 = intersection(m1, m3);
         //for reference that one is O(n), this one is O(n²)
