@@ -4,9 +4,10 @@
 #include "tags.hpp"
 #include "search.hpp"
 
+//please compile with the -O3 flag, if you're insane use gcc, but this was made on clang
+
 int main(int argc, char* argv[]) {
     Database test{};
-
     char op{};
     do{
         std::cout << "Y for another read, N to leave\n";
