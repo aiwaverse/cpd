@@ -5,13 +5,16 @@
 #include <iomanip>
 #include <limits>
 
-Database::Database(std::string file_name){
+Database::Database(std::string file_name) {
     std::cout << "Starting trie construction:\n";
     read_movie_file();
-    std::cout << "Trie finished construction:\n";
+    std::cout << "Trie finished construction\n";
     std::cout << "Starting hash construction:\n";
     read_ratings_file(file_name);
-    std::cout << "Hash finished construction:\n";
+    std::cout << "Hash finished construction\n";
+    std::cout << "Starting tag hash construction:\n";
+    read_tags_file();
+    std::cout << "Ended tag hash construction\n";
 }
 
 void Database::read_movie_file(void) {
@@ -54,23 +57,22 @@ void Database::read_ratings_file(std::string rating_file) {
     rating.close();
 }
 
-void Database::read_tags_file(void){
+void Database::read_tags_file(void) {
     std::ifstream tags("Dados/tag.csv");
-    if(not tags){
+    if (not tags) {
         throw std::runtime_error("wrong tag.csv file");
     }
     std::string line{};
-    std::getline(tags, line);   //get the fields line
-    while(std::getline(tags, line)){
-        std::istringstream iss {line};
+    std::getline(tags, line);  //get the fields line
+    while (std::getline(tags, line)) {
+        std::istringstream iss{line};
         std::string token{};
         std::getline(iss, token, ',');
-        int user_id {std::stoi(token)};
         std::getline(iss, token, ',');
-        int movie_id {std::stoi(token)};
+        int movie_id{std::stoi(token)};
         std::getline(iss, token, ',');
-        auto tag_list {make_string_vector(unquote(token))};
-        
+        auto tag{unquote(token)};
+        movie_tags.insert(tag, movie_id);
     }
 }
 
@@ -98,11 +100,25 @@ void fill_rating_field(std::string& s, int& user_id, int& movie_id, double& rati
     rating = std::stod(fields);
 }
 
+void Database::search_tag(const std::string& tag) {
+    auto retorno{movie_tags.find(tag)};
+    std::cout << "Movies:\n";
+    for (auto movie : retorno) {
+        auto current = movie_data.find(movie);
+        std::cout << current.name << "\n";
+    }
+}
+
 void Database::search_word(std::string& s) {
     movie_names.clear();
     movie_names.find(s);
     print_search(movie_names.infos());
 }
+
+void Database::search_user(unsigned id) {
+    auto find_result{ratings.find(id)};
+}
+
 void Database::print_search(std::vector<std::pair<std::string, unsigned>> vec) {
     using std::cout;
     using std::setw;

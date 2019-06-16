@@ -19,7 +19,9 @@ class Database {
     void read_tags_file(void);
     Database(std::string file_name = default_ratings_file);
     void search_word(std::string& s);
+    void search_tag(const std::string&);
     void print_search(std::vector<std::pair<std::string, unsigned>>);
+    void search_user(unsigned id);
 
 };
 std::string parse_genres(std::string& s);
