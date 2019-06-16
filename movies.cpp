@@ -166,7 +166,7 @@ void Database::print_search(std::vector<std::pair<std::string, unsigned>> vec) {
     std::cout << std::fixed;
     cout << setw(8) << "id"
          << " " << setw(44) << std::right << "movie name"
-         << "  " << setw(68) << std::right << "Genres"
+         << "  " << setw(58) << std::right << "Genres"
          << " " << setw(9) << "Rating"
          << " " << setw(10) << "Count\n";
     //can i do this?
@@ -187,7 +187,7 @@ void Database::print_search(std::vector<std::pair<std::string, unsigned>> vec) {
         auto grade{(current_movie_hash.all_ratings / current_movie_hash.number_of_ratings)};
         if (current_movie_hash.number_of_ratings == 0)
             grade = 0;
-        cout << setw(70) << std::right << all_genres;
+        cout << setw(60) << std::right << all_genres;
         cout << setw(10) << grade << setw(10) << current_movie_hash.number_of_ratings;
         cout << "\n";
     }
