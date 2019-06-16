@@ -30,5 +30,6 @@ void tag_query(const std::string& tags, Database& obj) {
     std::cout << "got to tag query with tags: " << tags << "\n";
 }
 void user_query(const std::string& user, Database& obj) {
-    unsigned user_id {std::stoi(user)};
+    int user_id {std::stoi(user)};
+    obj.search_user(user_id);
 }

@@ -116,7 +116,24 @@ void Database::search_word(std::string& s) {
 }
 
 void Database::search_user(unsigned id) {
+    using std::left;
+    using std::right;
+    using std::setw;
     auto find_result{ratings.find(id)};
+    std::cout << setw(11) << "user_rating"
+              << "   " << setw(40) << "movie names   " << setw(13) << "global rating"
+              << "    " << setw(7) << "count\n";
+    for (auto entry : find_result.movie_ratings) {
+        auto movie{movie_data.find(entry.first)};
+        std::cout.precision(1);
+        std::cout << std::fixed;
+        std::cout << setw(11) << entry.second << "  " << setw(40) << string_print(movie.name) << "  ";
+        auto grade{movie.all_ratings / movie.number_of_ratings};
+        if (movie.number_of_ratings == 0)
+            grade = 0;
+        std::cout.precision(6);
+        std::cout << std::fixed << setw(13) << grade << "  " << setw(7) << movie.number_of_ratings << "\n";
+    }
 }
 
 void Database::print_search(std::vector<std::pair<std::string, unsigned>> vec) {

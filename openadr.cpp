@@ -47,12 +47,14 @@ bool Hash_Table::insert(open::movie_data& data, size_t id) {
 
 movie_data Hash_Table::find(size_t to_find) {
     size_t i{0};
+    if(to_find >= table.size())
+        return {};
     size_t key{hash(to_find)};
     auto o_key{key};
     size_t pos{key % table.size()};
-    while (table[pos].used() == true) {
-        if (table[pos].key() == key)  //if the space is availabe
-            return table[pos].data();
+    while (table.at(pos).used() == true) {
+        if (table.at(pos).key() == key)  //if the space is availabe
+            return table.at(pos).data();
         ++i;
         key = double_probing(o_key, i);
         pos = key % table.size();
