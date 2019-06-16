@@ -75,22 +75,4 @@ void Hash_Table::add_rating(size_t to_find, double rating) {
         pos = key % table.size();
     }
 }
-
-/*void Hash_Table::print(std::ofstream& os) {
-    for (auto e : table) {
-        if (e.key() != 0)
-            os << "Key: " << e.key() << ", Word: " << e.string() << ", collisions to insert: " << e.collisions() << std::endl;
-    }
-    os << "Number of filled nodes: " << number_of_strings << ", " << (static_cast<double>(number_of_strings) / table.size()) * 100 << "\% of the table is occupied" << std::endl;
-    os << "Number of collisions on construction: " << total_collisions << ", with a mean of: " << static_cast<double>(total_collisions) / number_of_strings << std::endl;
-    std::cout << "Number of filled nodes: " << number_of_strings << ", " << (static_cast<double>(number_of_strings) / table.size()) * 100 << "\% of the table is occupied" << std::endl;
-    std::cout << "Number of collisions on construction: " << total_collisions << ", with a mean of: " << static_cast<double>(total_collisions) / number_of_strings << std::endl;
-}
-void Hash_Table::print(void) {
-    for (auto e : table) {
-        if (e.key() != 0)
-            std::cout << "Key: " << e.key() << ", Word: " << e.string() << ", collisions to insert: " << e.collisions() << std::endl;
-    }
-    std::cout << "Number of filled nodes: " << number_of_strings << ", " << (number_of_strings / table.size()) * 100 << "%% of the table is occupied" << std::endl;
-}*/
 }  // namespace open

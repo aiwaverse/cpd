@@ -1,6 +1,7 @@
 #include "search.hpp"
 #include <iostream>
 #include <iomanip>
+#include <algorithm>
 
 void choose_query(const std::string& first, const std::string& line, Database& obj) {
     if (first == "movie")
@@ -24,7 +25,14 @@ void title_query(const std::string& title, Database& obj) {
     obj.search_word(const_cast<std::string&>(title));
 }
 void topN_query(const std::string& genre, unsigned n, Database& obj) {
-    std::cout << "got to topN query with genre: " << genre << " and n: " << n << "\n";
+    std::istringstream iss{genre};
+    std::string token{};
+    while(iss >> std::quoted(token, '\'')){
+        std::string actual_genre{};
+        std::transform(token.begin(), token.end(), std::back_inserter(actual_genre), ::tolower);
+        obj.search_top(actual_genre, n);
+    }
+    return;
 }
 void tag_query(const std::string& tags, Database& obj) {
     std::istringstream iss{tags};

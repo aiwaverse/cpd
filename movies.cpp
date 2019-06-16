@@ -1,10 +1,11 @@
 #include "movies.hpp"
-#include "algo.hpp"
 #include <algorithm>
 #include <chrono>
 #include <fstream>
 #include <iomanip>
 #include <limits>
+#include <queue>
+#include "algo.hpp"
 
 Database::Database(std::string file_name) {
     using namespace std::chrono;
@@ -38,7 +39,10 @@ void Database::read_movie_file(void) {
         std::string genres{parse_genres(movie_string)};
         genres = unquote(genres);
         auto genre_list{make_string_vector(genres)};
-        open::movie_data data{0, 0, genre_list, name};
+        std::string genres_low{};
+        std::transform(genres.begin(), genres.end(), std::back_inserter(genres_low), ::tolower);
+        auto genre_cap {make_string_vector(genres_low)};
+        open::movie_data data{0, 0, genre_list, genre_cap, name};
         movie_data.insert(data, id);
     }
     movie.close();
@@ -134,13 +138,33 @@ void Database::search_user(unsigned id) {
     }
 }
 
+void Database::search_top(const std::string& genre, unsigned n) {
+    std::priority_queue<std::pair<double, unsigned>> top_movies{};
+    for (unsigned i{}; i < 36529; ++i) {
+        auto curr_movie = movie_data.find(i);
+        if ((curr_movie.number_of_ratings>=20) and (std::find(curr_movie.genres_low.begin(), curr_movie.genres_low.end(), genre) != curr_movie.genres_low.end())) {
+            auto curr_grade = curr_movie.all_ratings/curr_movie.number_of_ratings;
+            top_movies.push(std::make_pair(curr_grade, i));
+        }
+    }
+    int i{};
+    std::vector<unsigned> movies_to_send{};
+    while (not top_movies.empty() and i < n) {
+        movies_to_send.push_back(top_movies.top().second);
+        top_movies.pop();
+        ++i;
+    }
+    print_search(movies_to_send);
+}
+
 void Database::print_search(std::vector<std::pair<std::string, unsigned>> vec) {
     using std::cout;
     using std::setw;
     std::cout.precision(6);
     std::cout << std::fixed;
     cout << setw(8) << "id"
-         << " " << setw(44) << std::right << "movie name" << "  " << setw(48) << std::right << "Genres"
+         << " " << setw(44) << std::right << "movie name"
+         << "  " << setw(48) << std::right << "Genres"
          << " " << setw(9) << "Rating"
          << " " << setw(10) << "Count\n";
     //can i do this?
@@ -170,10 +194,13 @@ void Database::print_search(const std::vector<unsigned>& movies) {
     using std::setw;
     std::cout.precision(6);
     std::cout << std::fixed;
-    std::cout << setw(40) << "Movie name" << "  " << setw(50) << "Genres" << "  "
-    << setw(8) << "Rating" << "  " << setw(8) << "Count\n";
+    std::cout << setw(40) << "Movie name"
+              << "  " << setw(70) << "Genres"
+              << "  "
+              << setw(8) << "Rating"
+              << "  " << setw(8) << "Count\n";
     for (auto& m : movies) {
-        auto curr {movie_data.find(m)};
+        auto curr{movie_data.find(m)};
         std::cout << setw(40) << string_print(curr.name) << "  ";
         std::string all_genres{};
         for (auto& g : curr.genres) {
@@ -183,7 +210,7 @@ void Database::print_search(const std::vector<unsigned>& movies) {
         auto grade{(curr.all_ratings / curr.number_of_ratings)};
         if (curr.number_of_ratings == 0)
             grade = 0;
-        std::cout << setw(50) << all_genres << "  " << setw(7) << grade << "  " << setw(7) << curr.number_of_ratings << "\n";
+        std::cout << setw(70) << all_genres << "  " << setw(7) << grade << "  " << setw(7) << curr.number_of_ratings << "\n";
     }
 }
 
@@ -204,7 +231,7 @@ void Database::search_tag(const std::vector<std::string>& tags) {
 }
 
 std::string string_print(std::string& s) {
-    if(*(s.end()-1) == ' ')
+    if (*(s.end() - 1) == ' ')
         s.pop_back();
     if (s.size() < 40)
         return s;
@@ -255,7 +282,7 @@ std::vector<std::string> make_string_vector(const std::string& s) {
     std::stringstream iss{s};
     std::string part{};
     std::vector<std::string> svec{};
-    if ((s == "(no genres listed)") or (s== "(no"))
+    if ((s == "(no genres listed)") or (s == "(no"))
         return svec;
     while (std::getline(iss, part, '|')) {
         svec.push_back(part);

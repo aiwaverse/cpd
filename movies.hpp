@@ -24,6 +24,7 @@ class Database {
     void print_search(const std::vector<unsigned>&);
     void search_user(unsigned id);
     void search_tag(const std::vector<std::string>&);
+    void search_top(const std::string&, unsigned);
 
 };
 std::string parse_genres(std::string& s);

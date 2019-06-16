@@ -12,6 +12,7 @@ struct movie_data {
     unsigned number_of_ratings{};
     double all_ratings{};
     std::vector<std::string> genres{};
+    std::vector<std::string> genres_low{};
     std::string name{};
     friend std::ostream& operator<<(std::ostream& os,const movie_data& rhs);
 };
@@ -52,7 +53,7 @@ class Hash_N {
 class Hash_Table {
    private:  //change to private
     std::vector<Hash_N> table{};
-    const unsigned size_of_table{50000};
+    const unsigned size_of_table{36529};
     //mapping of strings to size_t and probings
     size_t linear_probing(size_t, const unsigned);
     size_t double_probing(size_t, const unsigned);  //double probing and not double hashing to keep a pattern
@@ -65,8 +66,7 @@ class Hash_Table {
     bool insert(movie_data& data, size_t id);
     movie_data find(size_t to_find);
     void add_rating(size_t to_find, double rating);
-    void print(std::ofstream& os);
-    void print(void);
+    std::vector<Hash_N> all_movies(void){return table;};
 };
 
 
