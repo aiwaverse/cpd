@@ -1,5 +1,4 @@
 #include "search.hpp"
-
 #include <iostream>
 
 void choose_query(const std::string& first, const std::string& line, Database& obj) {
@@ -30,6 +29,10 @@ void tag_query(const std::string& tags, Database& obj) {
     std::cout << "got to tag query with tags: " << tags << "\n";
 }
 void user_query(const std::string& user, Database& obj) {
-    int user_id {std::stoi(user)};
-    obj.search_user(user_id);
+    int user_id{std::stoi(user)};
+    try {
+        obj.search_user(user_id);
+    } catch (std::out_of_range) {
+        std::cout << "Please use a valid user id\n";
+    }
 }

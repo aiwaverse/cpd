@@ -52,7 +52,7 @@ class Hash_N {
 class Hash_Table {
    private:  //change to private
     std::vector<Hash_N> table{};
-    const unsigned size_of_table{36529};
+    const unsigned size_of_table{50000};
     //mapping of strings to size_t and probings
     size_t linear_probing(size_t, const unsigned);
     size_t double_probing(size_t, const unsigned);  //double probing and not double hashing to keep a pattern
@@ -68,5 +68,6 @@ class Hash_Table {
     void print(std::ofstream& os);
     void print(void);
 };
+
 
 }  //namespace open

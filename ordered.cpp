@@ -2,7 +2,7 @@
 #include <iostream>
 namespace ordered {
 User_data Users::find(size_t n) {
-    return users_info[n];
+    return users_info.at(n);
 }
 void Users::insert(size_t user, unsigned movie_id, double rating) {
     auto new_element{std::make_pair(movie_id, rating)};

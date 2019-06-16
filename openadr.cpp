@@ -47,8 +47,6 @@ bool Hash_Table::insert(open::movie_data& data, size_t id) {
 
 movie_data Hash_Table::find(size_t to_find) {
     size_t i{0};
-    if(to_find >= table.size())
-        return {};
     size_t key{hash(to_find)};
     auto o_key{key};
     size_t pos{key % table.size()};

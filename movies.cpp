@@ -6,6 +6,8 @@
 #include <limits>
 
 Database::Database(std::string file_name) {
+    using namespace std::chrono;
+    auto start {system_clock::now()};
     std::cout << "Starting trie construction:\n";
     read_movie_file();
     std::cout << "Trie finished construction\n";
@@ -15,6 +17,9 @@ Database::Database(std::string file_name) {
     std::cout << "Starting tag hash construction:\n";
     read_tags_file();
     std::cout << "Ended tag hash construction\n";
+    auto end {system_clock::now()};
+    auto time {duration_cast<nanoseconds>(end-start).count()};
+    std::cout << "it all took " << time/1000000000.0 << " seconds\n";
 }
 
 void Database::read_movie_file(void) {
@@ -125,6 +130,8 @@ void Database::search_user(unsigned id) {
               << "    " << setw(7) << "count\n";
     for (auto entry : find_result.movie_ratings) {
         auto movie{movie_data.find(entry.first)};
+        if (movie.name.empty())
+            std::cout << "and i oop, movie id: " << entry.first << "\n";
         std::cout.precision(1);
         std::cout << std::fixed;
         std::cout << setw(11) << entry.second << "  " << setw(40) << string_print(movie.name) << "  ";
