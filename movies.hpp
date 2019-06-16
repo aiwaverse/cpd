@@ -21,7 +21,9 @@ class Database {
     void search_word(std::string& s);
     void search_tag(const std::string&);
     void print_search(std::vector<std::pair<std::string, unsigned>>);
+    void print_search(const std::vector<unsigned>&);
     void search_user(unsigned id);
+    void search_tag(const std::vector<std::string>&);
 
 };
 std::string parse_genres(std::string& s);
@@ -31,4 +33,4 @@ void clear_buffer(void);
 std::string unquote( const std::string& s );
 std::vector<std::string> make_string_vector(const std::string& s);
 void fill_rating_field(std::string& s, int& user_id, int& movie_id, double& rating);
-std::string string_print(const std::string& s);
+std::string string_print(std::string& s);

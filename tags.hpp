@@ -42,7 +42,7 @@ class Hash_Table {
     Hash_Table(const Hash_Table&) = default;
     Hash_Table(Hash_Table&&) = default;
     bool insert(std::string, unsigned id);
-    std::vector<unsigned> find(std::string);
+    std::vector<unsigned> find(const std::string&);
     void print(std::ofstream& os);
     void print(void);
 };

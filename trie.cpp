@@ -8,7 +8,7 @@ int basic_node::convert_c(int c) {
         c -= 7;
     return c;
 }
-std::string basic_node::transform_string(std::string in) {
+std::string transform_string(std::string in) {
     std::string out{};
     for (auto& c : in) {
         if (isalnum(c))

@@ -54,7 +54,7 @@ bool Hash_Table::insert(std::string s, unsigned id) {
     return true;
 }
 
-std::vector<unsigned> Hash_Table::find(std::string s) {
+std::vector<unsigned> Hash_Table::find(const std::string& s) {
     size_t i{0};
     size_t key{mapping(s)};
     auto o_key{key};
