@@ -7,7 +7,7 @@
 
 Database::Database(std::string file_name) {
     using namespace std::chrono;
-    auto start {system_clock::now()};
+    auto start {steady_clock::now()};
     std::cout << "Starting trie construction:\n";
     read_movie_file();
     std::cout << "Trie finished construction\n";
@@ -17,7 +17,7 @@ Database::Database(std::string file_name) {
     std::cout << "Starting tag hash construction:\n";
     read_tags_file();
     std::cout << "Ended tag hash construction\n";
-    auto end {system_clock::now()};
+    auto end {steady_clock::now()};
     auto time {duration_cast<nanoseconds>(end-start).count()};
     std::cout << "it all took " << time/1000000000.0 << " seconds\n";
 }
