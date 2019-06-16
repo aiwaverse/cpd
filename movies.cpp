@@ -140,8 +140,8 @@ void Database::print_search(std::vector<std::pair<std::string, unsigned>> vec) {
     std::cout.precision(6);
     std::cout << std::fixed;
     cout << setw(8) << "id"
-         << " " << setw(45) << std::right << "movie name" << setw(50) << "  " << std::right << "Genres"
-         << " " << setw(10) << "Rating"
+         << " " << setw(44) << std::right << "movie name" << "  " << setw(48) << std::right << "Genres"
+         << " " << setw(9) << "Rating"
          << " " << setw(10) << "Count\n";
     //can i do this?
     std::sort(vec.begin(), vec.end(),
@@ -170,8 +170,8 @@ void Database::print_search(const std::vector<unsigned>& movies) {
     using std::setw;
     std::cout.precision(6);
     std::cout << std::fixed;
-    std::cout << setw(40) << "Movie name" << "  " << setw(66) << "Genres" << "  "
-    << setw(7) << "Rating" << "  " << setw(7) << "Count\n";
+    std::cout << setw(40) << "Movie name" << "  " << setw(50) << "Genres" << "  "
+    << setw(8) << "Rating" << "  " << setw(8) << "Count\n";
     for (auto& m : movies) {
         auto curr {movie_data.find(m)};
         std::cout << setw(40) << string_print(curr.name) << "  ";
@@ -183,7 +183,7 @@ void Database::print_search(const std::vector<unsigned>& movies) {
         auto grade{(curr.all_ratings / curr.number_of_ratings)};
         if (curr.number_of_ratings == 0)
             grade = 0;
-        std::cout << setw(70) << all_genres << "  " << setw(7) << grade << "  " << setw(7) << curr.number_of_ratings << "\n";
+        std::cout << setw(50) << all_genres << "  " << setw(7) << grade << "  " << setw(7) << curr.number_of_ratings << "\n";
     }
 }
 
