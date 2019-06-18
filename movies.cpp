@@ -140,12 +140,12 @@ void Database::search_top(const std::string& genre, unsigned n) {
     for (unsigned i{}; i < 131262; ++i) {
         auto curr_movie = movie_data.find(i);
         std::string temp{};
-        for(auto each : curr_movie.genres)
-            temp+=(each)+" ";
+        for (auto each : curr_movie.genres)
+            temp += (each) + " ";
         std::string genres_low{};
         std::transform(temp.begin(), temp.end(), std::back_inserter(genres_low), ::tolower);
-        if ((curr_movie.number_of_ratings>=20) and (genres_low.find(genre) != std::string::npos)) {
-            auto curr_grade = curr_movie.all_ratings/curr_movie.number_of_ratings;
+        if ((curr_movie.number_of_ratings >= 20) and (genres_low.find(genre) != std::string::npos)) {
+            auto curr_grade = curr_movie.all_ratings / curr_movie.number_of_ratings;
             top_movies.push(std::make_pair(curr_grade, i));
         }
     }
@@ -225,9 +225,7 @@ void Database::search_tag(const std::vector<std::string>& tags) {
     for (unsigned i{1}; i < tags.size(); ++i) {
         auto m3 = movie_tags.find(tags.at(i));
         shellsort_ciura_basic(m3);
-        //any non-stupid person would use the stl set intersection, but y'know, rules are rules
-        m2 = intersection(m1, m3);
-        //for reference that one is O(n), this one is O(n²)
+        std::set_intersection(m1.begin(), m1.end(), m3.begin(), m3.end(), std::back_inserter(m2));
         m2.swap(m1);
         m2.clear();
     }
