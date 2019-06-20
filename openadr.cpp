@@ -66,7 +66,7 @@ void Hash_Table::add_rating(size_t to_find, double rating) {
     auto o_key{key};
     size_t pos{key % table.size()};
     while (table[pos].used() == true) {
-        if (table[pos].key() == key) {  //if the space is availabe
+        if (table[pos].key() == key) {  //if movie is found
             table[pos]._content.all_ratings+=rating;
             ++table[pos]._content.number_of_ratings;
         }

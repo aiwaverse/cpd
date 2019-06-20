@@ -10,7 +10,7 @@
 
 Database::Database(std::string file_name) {
     using namespace std::chrono;
-    auto start{steady_clock::now()};
+    auto start{steady_clock::now()};    //steady clock is monotonic
     std::cout << "Starting trie construction:\n";
     read_movie_file();
     std::cout << "Trie finished construction\n";
@@ -19,7 +19,7 @@ Database::Database(std::string file_name) {
     //read_ratings_file(file_name);
     std::cout << "Starting tag hash construction:\n";
     std::thread tags_thread(&Database::read_tags_file, this);
-    rating_thread.join();
+    rating_thread.join();   //join the threads, wait for everything to finish
     tags_thread.join();
     std::cout << "Hash finished construction\n";
     std::cout << "Ended tag hash construction\n";
