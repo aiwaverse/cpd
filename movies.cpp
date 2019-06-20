@@ -262,9 +262,14 @@ std::string parse_genres(std::string& s) {
 
 std::string parse_quoted_line(std::string& s) {
     auto first = s.find(",\"");
-    std::string s2(s.begin() + first + 2, s.end());
-    auto last = s2.find("\",");
-    std::string new_s(s2.begin(), s2.begin() + last);
+    auto i{first + 2};
+    std::string new_s{};
+    while (((s[i - 1] != ',') or (s[i] != '\"') )and (i < s.size())) {
+        new_s.push_back(s[i]);
+        ++i;
+    }
+    new_s.pop_back();
+    new_s.pop_back();
     return new_s;
 }
 
