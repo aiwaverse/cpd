@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <limits>
 #include <queue>
+#include <thread>
 #include "algo.hpp"
 
 Database::Database(std::string file_name) {
@@ -14,10 +15,13 @@ Database::Database(std::string file_name) {
     read_movie_file();
     std::cout << "Trie finished construction\n";
     std::cout << "Starting hash construction:\n";
-    read_ratings_file(file_name);
-    std::cout << "Hash finished construction\n";
+    std::thread rating_thread(&Database::read_ratings_file, this, file_name);
+    //read_ratings_file(file_name);
     std::cout << "Starting tag hash construction:\n";
-    read_tags_file();
+    std::thread tags_thread(&Database::read_tags_file, this);
+    rating_thread.join();
+    tags_thread.join();
+    std::cout << "Hash finished construction\n";
     std::cout << "Ended tag hash construction\n";
     auto end{steady_clock::now()};
     auto time{duration_cast<nanoseconds>(end - start).count()};
@@ -264,7 +268,7 @@ std::string parse_quoted_line(std::string& s) {
     auto first = s.find(",\"");
     auto i{first + 2};
     std::string new_s{};
-    while (((s[i - 1] != ',') or (s[i] != '\"') )and (i < s.size())) {
+    while (((s[i - 1] != ',') or (s[i] != '\"')) and (i < s.size())) {
         new_s.push_back(s[i]);
         ++i;
     }
