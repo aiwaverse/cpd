@@ -3,12 +3,12 @@
 #include <fstream>
 #include <functional>
 #include <iostream>
-#include <string>
 #include <ostream>
+#include <string>
 #include <vector>
 namespace open {
-    //this class syntax was very much copied from my original code
-    //useless garbage may be present, but this doesn't seem to be too much of a problem
+//this class syntax was very much copied from my original code
+//useless garbage may be present, but this doesn't seem to be too much of a problem
 struct movie_data {
     unsigned number_of_ratings{};
     double all_ratings{};
@@ -18,6 +18,7 @@ struct movie_data {
 
 class Hash_N {
     friend class Hash_Table;
+
    private:
     movie_data _content{};
     size_t _key{0};
@@ -50,14 +51,29 @@ class Hash_Table {
     size_t double_probing(size_t, const unsigned);  //double probing and not double hashing to keep a pattern
     unsigned hash(unsigned);
     unsigned unhash(unsigned x);
+
    public:
     Hash_Table() { table.resize(size_of_table); }
     Hash_Table(const Hash_Table&) = default;
     Hash_Table(Hash_Table&&) = default;
     bool insert(movie_data& data, size_t id);
     movie_data find(size_t to_find);
-    void add_rating(size_t to_find, double rating);
+    inline void add_rating(size_t to_find, double rating);
 };
-
+inline void Hash_Table::add_rating(size_t to_find, double rating) {
+    size_t i{0};
+    size_t key{hash(to_find)};
+    auto o_key{key};
+    size_t pos{key % table.size()};
+    while (table[pos].used() == true) {
+        if (table[pos].key() == key) {  //if movie is found
+            table[pos]._content.all_ratings += rating;
+            ++table[pos]._content.number_of_ratings;
+        }
+        ++i;
+        key = double_probing(o_key, i);
+        pos = key % table.size();
+    }
+}
 
 }  //namespace open
