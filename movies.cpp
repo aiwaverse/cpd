@@ -16,7 +16,6 @@ Database::Database(std::string file_name) {
     std::cout << "Trie finished construction\n";
     std::cout << "Starting hash construction:\n";
     std::thread rating_thread(&Database::read_ratings_file, this, file_name);
-    //read_ratings_file(file_name);
     std::cout << "Starting tag hash construction:\n";
     std::thread tags_thread(&Database::read_tags_file, this);
     rating_thread.join();   //join the threads, wait for everything to finish
@@ -223,13 +222,16 @@ void Database::print_search(const std::vector<unsigned>& movies) {
 }
 
 void Database::search_tag(const std::vector<std::string>& tags) {
+    //get the first set of tags and sort them
     auto m1 = movie_tags.find(tags.at(0));
     shellsort_ciura_basic(m1);
     std::vector<unsigned> m2{};
     for (unsigned i{1}; i < tags.size(); ++i) {
+        //gets a new set of tags, sort them, and finds the insersection with the current tag set
         auto m3 = movie_tags.find(tags.at(i));
         shellsort_ciura_basic(m3);
         std::set_intersection(m1.begin(), m1.end(), m3.begin(), m3.end(), std::back_inserter(m2));
+        //put the new tag set as m1, to use with the insersection again, as m1 gathers the full intersection
         m2.swap(m1);
         m2.clear();
     }
@@ -249,6 +251,7 @@ std::string string_print(std::string& s) {
 }
 
 std::string parse_line(const std::string& s, unsigned info) {
+    //in the end this is only used once, because it's innefficient to do regularly, aside from not working with sensitive strings
     std::stringstream iss{s};
     std::string extracted{};
     unsigned i{};
@@ -272,6 +275,7 @@ std::string parse_quoted_line(std::string& s) {
         new_s.push_back(s[i]);
         ++i;
     }
+    //removes the quotes and comma
     new_s.pop_back();
     new_s.pop_back();
     return new_s;

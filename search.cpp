@@ -2,7 +2,6 @@
 #include <algorithm>
 #include <iomanip>
 #include <iostream>
-#include <iomanip>
 
 void choose_query(const std::string& first, const std::string& line, Database& obj) {
     if (first == "movie")
@@ -24,11 +23,11 @@ void choose_query(const std::string& first, const std::string& line, Database& o
         }
     } else if (first == "help") {
         std::cout << "Valid inputs:\n";
-        std::cout <<"\tmovie <movie name or prefix>\n"
-                  <<"\tuser <id>\n"
-                  <<"\ttop<number> '<genre>'\n"
-                  <<"\ttags '<tag>' (any number of tags)\n"
-                  <<"\tquit\n";
+        std::cout << "\tmovie <movie name or prefix>\n"
+                  << "\tuser <id>\n"
+                  << "\ttop<number> '<genre>'\n"
+                  << "\ttags '<tag>' (any number of tags)\n"
+                  << "\tquit\n";
     } else if (first == "quit")
         return;
     else {
@@ -44,9 +43,9 @@ void topN_query(const std::string& genre, unsigned n, Database& obj) {
     std::istringstream iss{genre};
     std::string token{};
     while (iss >> std::quoted(token, '\'')) {
-        std::string actual_genre{};
-        std::transform(token.begin(), token.end(), std::back_inserter(actual_genre), ::tolower);
-        obj.search_top(actual_genre, n);
+        for(auto& t:token)
+            t = tolower(t);
+        obj.search_top(token, n);
     }
     return;
 }
@@ -55,6 +54,7 @@ void tag_query(const std::string& tags, Database& obj) {
     std::string token{};
     std::vector<std::string> all_tags{};
     while (iss >> std::quoted(token, '\'')) {
+        //the tags are never actually stored the way they were written
         token = trie::transform_string(token);
         all_tags.push_back(token);
     }

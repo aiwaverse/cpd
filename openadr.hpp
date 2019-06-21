@@ -7,27 +7,18 @@
 #include <ostream>
 #include <vector>
 namespace open {
-
+    //this class syntax was very much copied from my original code
+    //useless garbage may be present, but this doesn't seem to be too much of a problem
 struct movie_data {
     unsigned number_of_ratings{};
     double all_ratings{};
     std::vector<std::string> genres{};
     std::string name{};
-    friend std::ostream& operator<<(std::ostream& os,const movie_data& rhs);
 };
-
-inline std::ostream& operator<<(std::ostream& os,const movie_data& rhs){
-    os << "Rating: " << rhs.all_ratings/rhs.number_of_ratings << "\n";
-    for(auto& g: rhs.genres){
-        os << g << " ";
-    }
-    os << std::endl;
-    return os;
-}
 
 class Hash_N {
     friend class Hash_Table;
-   private:  //change to private
+   private:
     movie_data _content{};
     size_t _key{0};
     bool _occupied{false};
@@ -48,9 +39,10 @@ class Hash_N {
     void set_occupied(bool b) { _occupied = b; };
     void set_used(bool b) { _used = b; };
     void set_data(movie_data& s) { _content = s; };
+    //if i used so many set/get, better make it public honestly, but it was too much of a hassle to change
 };
 class Hash_Table {
-   private:  //change to private
+   private:
     std::vector<Hash_N> table{};
     const unsigned size_of_table{36529};
     //mapping of strings to size_t and probings
@@ -65,7 +57,6 @@ class Hash_Table {
     bool insert(movie_data& data, size_t id);
     movie_data find(size_t to_find);
     void add_rating(size_t to_find, double rating);
-    std::vector<Hash_N> all_movies(void){return table;};
 };
 
 

@@ -39,6 +39,8 @@ void basic_node::cycle_array(void) {
             if (ptr->is_word) {
                 auto word = dynamic_cast<leaf_node*>(ptr.get())->word;
                 auto id = dynamic_cast<leaf_node*>(ptr.get())->user_id;
+                //this is how i fixed the "recursive af return problem", static vector
+                //weird syntax because it's actually the pair constructor
                 _infos.push_back({word, id});
             }
             ptr->cycle_array();
@@ -53,13 +55,14 @@ void basic_node::insert(std::string& original, unsigned id) {
 void basic_node::_insert(std::string& modified, const std::string& original, unsigned id) {
     int c{convert_c(modified.at(0))};
     if (modified.length() > 1) {
-        //do the actual insertion?
+        //there's more to destroy 
         modified.erase(modified.begin());
         if (next_nodes.at(c) == nullptr) {
             next_nodes.at(c) = std::make_unique<basic_node>();
         }
         next_nodes.at(c)->_insert(modified, original, id);
     } else if (modified.length() == 1) {
+        //string is at insertion point
         if (next_nodes.at(c) == nullptr) {
             next_nodes.at(c) = std::make_unique<leaf_node>();
             next_nodes.at(c)->_insert(modified, original, id);
