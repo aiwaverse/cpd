@@ -3,6 +3,7 @@ namespace open {
 //probing functions
 size_t Hash_Table::double_probing(size_t c, const unsigned i) {
     return c + i * (29 - (c % 7));
+    //return c + (i*i);
 }
 size_t Hash_Table::linear_probing(size_t c, const unsigned i) {
     return c + i;
