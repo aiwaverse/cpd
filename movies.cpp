@@ -80,15 +80,9 @@ void Database::read_tags_file(void) {
         std::getline(iss, token, ',');
         std::getline(iss, token, ',');
         int movie_id{std::stoi(token)};
-        //std::getline(iss, token, ',');
         std::string tag = iss.str();
-        //std::cout << "tag before: " << tag << "\n";
         tag = parse_quoted_line(tag);
-        if (tag == "Wonderful Asian Film That Shows Why We Shouldn't Hide Who We Really Are")
-            std::cout << "Here\n";
-        //std::cout << "tag after: " << tag << "\n";
         tag = trie::transform_string(tag);
-        //std::cout << "tag transformed: " << tag << "\n";
         movie_tags.insert(tag, movie_id);
     }
 }
@@ -281,9 +275,6 @@ std::string parse_quoted_line(std::string& s) {
         new_s.push_back(s[i]);
         ++i;
     }
-    //removes the quotes and comma
-    //new_s.pop_back();
-    //new_s.pop_back();
     return new_s;
 }
 
@@ -303,8 +294,10 @@ std::vector<std::string> make_string_vector(const std::string& s) {
     std::stringstream iss{s};
     std::string part{};
     std::vector<std::string> svec{};
-    if ((s == "(no genres listed)") or (s == "(no"))
+    if ((s == "(no genres listed)") or (s == "(no")){
+        svec.push_back("(no genres listed)");
         return svec;
+        }
     while (std::getline(iss, part, '|')) {
         svec.push_back(part);
     }
