@@ -10,7 +10,7 @@
 
 Database::Database(std::string file_name) {
     using namespace std::chrono;
-    auto start{steady_clock::now()};    //steady clock is monotonic
+    auto start{steady_clock::now()};  //steady clock is monotonic
     std::cout << "Starting trie construction:\n";
     read_movie_file();
     std::cout << "Trie finished construction\n";
@@ -18,7 +18,7 @@ Database::Database(std::string file_name) {
     std::thread rating_thread(&Database::read_ratings_file, this, file_name);
     std::cout << "Starting tag hash construction:\n";
     std::thread tags_thread(&Database::read_tags_file, this);
-    rating_thread.join();   //join the threads, wait for everything to finish
+    rating_thread.join();  //join the threads, wait for everything to finish
     tags_thread.join();
     std::cout << "Hash finished construction\n";
     std::cout << "Ended tag hash construction\n";
@@ -80,9 +80,15 @@ void Database::read_tags_file(void) {
         std::getline(iss, token, ',');
         std::getline(iss, token, ',');
         int movie_id{std::stoi(token)};
-        std::getline(iss, token, ',');
-        auto tag{unquote(token)};
-        tag = trie::transform_string(token);
+        //std::getline(iss, token, ',');
+        std::string tag = iss.str();
+        //std::cout << "tag before: " << tag << "\n";
+        tag = parse_quoted_line(tag);
+        if (tag == "Wonderful Asian Film That Shows Why We Shouldn't Hide Who We Really Are")
+            std::cout << "Here\n";
+        //std::cout << "tag after: " << tag << "\n";
+        tag = trie::transform_string(tag);
+        //std::cout << "tag transformed: " << tag << "\n";
         movie_tags.insert(tag, movie_id);
     }
 }
@@ -271,13 +277,13 @@ std::string parse_quoted_line(std::string& s) {
     auto first = s.find(",\"");
     auto i{first + 2};
     std::string new_s{};
-    while (((s[i - 1] != ',') or (s[i] != '\"')) and (i < s.size())) {
+    while ((i < s.size()) and ((s[i] != '\"') or (s[i+1] != ','))){
         new_s.push_back(s[i]);
         ++i;
     }
     //removes the quotes and comma
-    new_s.pop_back();
-    new_s.pop_back();
+    //new_s.pop_back();
+    //new_s.pop_back();
     return new_s;
 }
 

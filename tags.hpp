@@ -38,7 +38,7 @@ class Hash_Table {
     bool test_for_tag(size_t pos, unsigned id);
 
    public:
-    Hash_Table(void) : table(620773){};
+    Hash_Table(void) : table(46183){};
     Hash_Table(const Hash_Table&) = default;
     Hash_Table(Hash_Table&&) = default;
     bool insert(std::string, unsigned id);
