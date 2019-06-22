@@ -17,9 +17,10 @@ Database::Database(std::string file_name) {
     std::cout << "Starting hash construction:\n";
     std::thread rating_thread(&Database::read_ratings_file, this, file_name);
     std::cout << "Starting tag hash construction:\n";
-    std::thread tags_thread(&Database::read_tags_file, this);
+    //std::thread tags_thread(&Database::read_tags_file, this);
+    read_tags_file();
     rating_thread.join();  //join the threads, wait for everything to finish
-    tags_thread.join();
+    //tags_thread.join();
     std::cout << "Hash finished construction\n";
     std::cout << "Ended tag hash construction\n";
     auto end{steady_clock::now()};
