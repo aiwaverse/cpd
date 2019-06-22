@@ -58,22 +58,7 @@ class Hash_Table {
     Hash_Table(Hash_Table&&) = default;
     bool insert(movie_data& data, size_t id);
     movie_data find(size_t to_find);
-    inline void add_rating(size_t to_find, double rating);
+    void add_rating(size_t to_find, double rating);
 };
-inline void Hash_Table::add_rating(size_t to_find, double rating) {
-    size_t i{0};
-    size_t key{hash(to_find)};
-    auto o_key{key};
-    size_t pos{key % table.size()};
-    while (table[pos].used() == true) {
-        if (table[pos].key() == key) {  //if movie is found
-            table[pos]._content.all_ratings += rating;
-            ++table[pos]._content.number_of_ratings;
-        }
-        ++i;
-        key = double_probing(o_key, i);
-        pos = key % table.size();
-    }
-}
 
 }  //namespace open
