@@ -6,7 +6,6 @@ namespace ordered {
 struct User_data {
     //pair of id and rating
     std::vector<std::pair<unsigned, double>> movie_ratings{};
-    friend std::ostream& operator<<(std::ostream& os, const User_data& rhs);
 };
 
 class Users {

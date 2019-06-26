@@ -14,6 +14,8 @@ struct movie_data {
     double all_ratings{};
     std::vector<std::string> genres{};
     std::string name{};
+    double ratings(void);
+    std::string all_genres(void);
 };
 
 class Hash_N {

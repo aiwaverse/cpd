@@ -19,10 +19,10 @@ Database::Database(std::string file_name) {
     std::cout << "Starting tag hash construction:\n";
     //std::thread tags_thread(&Database::read_tags_file, this);
     read_tags_file();
+    std::cout << "Ended tag hash construction\n";
     rating_thread.join();  //join the threads, wait for everything to finish
     //tags_thread.join();
     std::cout << "Hash finished construction\n";
-    std::cout << "Ended tag hash construction\n";
     auto end{steady_clock::now()};
     auto time{duration_cast<nanoseconds>(end - start).count()};
     std::cout << "it all took " << time / 1000000000.0 << " seconds\n";
@@ -173,27 +173,14 @@ void Database::print_search(std::vector<std::pair<std::string, unsigned>> vec) {
          << "  " << setw(58) << std::right << "Genres"
          << " " << setw(9) << "Rating"
          << " " << setw(10) << "Count\n";
-    //can i do this?
-    /*std::sort(vec.begin(), vec.end(),
-              [](const std::pair<std::string, unsigned>& a, const std::pair<std::string, unsigned>& b) {
-                  return a.second < b.second;
-              });*/
     shellsort_ciura_basic(vec);
     for (auto& movie : vec) {
-        auto current_movie_hash = movie_data.find(movie.second);
+        auto curr = movie_data.find(movie.second);
         cout << setw(8) << movie.second
              << setw(45) << std::right << string_print(movie.first);
-        std::string all_genres{};
-        for (auto& genres : current_movie_hash.genres) {
-            all_genres += genres;
-            all_genres += "|";
-        }
-        auto grade{(current_movie_hash.all_ratings / current_movie_hash.number_of_ratings)};
-        if (current_movie_hash.number_of_ratings == 0)
-            grade = 0;
-        cout << setw(60) << std::right << all_genres;
-        cout << setw(10) << grade << setw(10) << current_movie_hash.number_of_ratings;
-        cout << "\n";
+        cout << setw(60) << std::right << curr.all_genres();
+        cout << setw(10) << curr.ratings() << setw(10) << curr.number_of_ratings;
+        cout << std::endl;;
     }
 }
 
@@ -209,16 +196,8 @@ void Database::print_search(const std::vector<unsigned>& movies) {
               << "  " << setw(8) << "Count\n";
     for (auto& m : movies) {
         auto curr{movie_data.find(m)};
-        std::cout << "   " << setw(40) << string_print(curr.name) << "  ";
-        std::string all_genres{};
-        for (auto& g : curr.genres) {
-            all_genres += g;
-            all_genres += "|";
-        }
-        auto grade{(curr.all_ratings / curr.number_of_ratings)};
-        if (curr.number_of_ratings == 0)
-            grade = 0;
-        std::cout << setw(70) << all_genres << "  " << setw(7) << grade << "  " << setw(7) << curr.number_of_ratings << "\n";
+        std::cout << "   " << setw(41) << std::right << string_print(curr.name) << "  " << std::flush;
+        std::cout << setw(70) << curr.all_genres() << "  " << setw(7) << curr.ratings() << "  " << setw(7) << curr.number_of_ratings << std::endl;
     }
 }
 

@@ -31,7 +31,7 @@ bool Hash_Table::insert(open::movie_data& data, size_t id) {
         if (table[pos].occupied() == false)  //if the space is availabe
             break;
         //remove first condition
-        if (table[pos].key() == static_cast<size_t>(key))  //if the key at the position is the same, the element is the same
+        if (table[pos].key() == key)  //if the key at the position is the same, the element is the same
             return false;
         ++i;
         key = double_probing(o_key, i);  //o_key is to use the original key in the function and not the new key
@@ -74,5 +74,20 @@ void Hash_Table::add_rating(size_t to_find, double rating) {
         key = double_probing(o_key, i);
         pos = key % table.size();
     }
+}
+
+double movie_data::ratings(void) {
+    if (number_of_ratings == 0)
+        return 0.0;
+    return all_ratings / number_of_ratings;
+}
+
+std::string movie_data::all_genres(void) {
+    std::string ge{};
+    for (auto& g : genres) {
+        ge += g;
+        ge += "|";
+    }
+    return ge;
 }
 }  // namespace open
