@@ -219,13 +219,14 @@ void Database::search_tag(const std::vector<std::string>& tags) {
 }
 
 std::string string_print(std::string& s) {
-    if (*(s.end() - 1) == ' ')
-        s.pop_back();
     if (s.size() < 40)
         return s;
     std::string new_s{};
-    for (auto i{0U}; i < 37; ++i)
-        new_s += s[i];
+    int i{};
+    while(new_s.size() < 37){
+        new_s+=s[i];
+        ++i;
+    }
     new_s += "...";
     return new_s;
 }
