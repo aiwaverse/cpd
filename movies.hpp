@@ -35,3 +35,4 @@ std::string unquote( const std::string& s );
 std::vector<std::string> make_string_vector(const std::string& s);
 void fill_rating_field(std::string& s, int& user_id, int& movie_id, double& rating);
 std::string string_print(std::string& s);
+int unicode_count(const std::string&);

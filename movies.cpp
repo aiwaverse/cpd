@@ -1,4 +1,3 @@
-#include "movies.hpp"
 #include <algorithm>
 #include <chrono>
 #include <fstream>
@@ -6,6 +5,10 @@
 #include <limits>
 #include <queue>
 #include <thread>
+#include <locale>
+#include <codecvt>
+
+#include "movies.hpp"
 #include "algo.hpp"
 
 Database::Database(std::string file_name) {
@@ -130,7 +133,8 @@ void Database::search_user(unsigned id) {
         auto movie{movie_data.find(entry.first)};
         std::cout.precision(1);
         std::cout << std::fixed;
-        std::cout << setw(11) << entry.second << "  " << setw(40) << string_print(movie.name) << "  ";
+        auto offset {unicode_count(string_print(movie.name))};
+        std::cout << setw(11) << entry.second << "  " << setw(40+offset) << string_print(movie.name) << "  ";
         auto grade{movie.all_ratings / movie.number_of_ratings};
         if (movie.number_of_ratings == 0)
             grade = 0;
@@ -176,8 +180,9 @@ void Database::print_search(std::vector<std::pair<std::string, unsigned>> vec) {
     shellsort_ciura_basic(vec);
     for (auto& movie : vec) {
         auto curr = movie_data.find(movie.second);
+        auto offset {unicode_count(string_print(movie.first))};
         cout << setw(8) << movie.second
-             << setw(45) << std::right << string_print(movie.first);
+             << setw(45+offset) << std::right << string_print(movie.first);
         cout << setw(60) << std::right << curr.all_genres();
         cout << setw(10) << curr.ratings() << setw(10) << curr.number_of_ratings;
         cout << std::endl;;
@@ -196,7 +201,8 @@ void Database::print_search(const std::vector<unsigned>& movies) {
               << "  " << setw(8) << "Count\n";
     for (auto& m : movies) {
         auto curr{movie_data.find(m)};
-        std::cout << "   " << setw(41) << std::right << string_print(curr.name) << "  " << std::flush;
+        auto offset {unicode_count(string_print(curr.name))};
+        std::cout << "   " << setw(41+offset) << std::right << string_print(curr.name) << "  " << std::flush;
         std::cout << setw(70) << curr.all_genres() << "  " << setw(7) << curr.ratings() << "  " << setw(7) << curr.number_of_ratings << std::endl;
     }
 }
@@ -229,6 +235,12 @@ std::string string_print(std::string& s) {
     }
     new_s += "...";
     return new_s;
+}
+
+int unicode_count(const std::string& s){
+    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+    std::wstring new_s = converter.from_bytes(s);
+    return s.size()-new_s.size();
 }
 
 std::string parse_line(const std::string& s, unsigned info) {
