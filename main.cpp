@@ -2,8 +2,10 @@
 #include <iomanip>
 #include <iostream>
 #include <limits>
+
 #include "search.hpp"
 #include "tags.hpp"
+#include "clear.hpp"
 
 //please compile with the -O3 flag, if you're insane use gcc, but this was made on clang
 
@@ -15,7 +17,7 @@ int main(int argc, char* argv[]) {
         std::cin >> query;
         //this "cleans the screen" (actually it just scrolls a bit, still works)
         //std::cout << "\033[2J\033[1;1H";
-        system("clear");
+        clear();
         std::cout << "======================================================================================================================================\n";
         std::string info{};
         std::getline(std::cin, info);

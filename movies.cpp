@@ -172,17 +172,18 @@ void Database::print_search(std::vector<std::pair<std::string, unsigned>> vec) {
     using std::setw;
     std::cout.precision(6);
     std::cout << std::fixed;
-    cout << setw(8) << "id"
-         << " " << setw(44) << std::right << "movie name"
+    cout << setw(8) << "ID"
+         << " " << setw(44) << std::right << "Movie name"
          << "  " << setw(58) << std::right << "Genres"
          << " " << setw(9) << "Rating"
          << " " << setw(10) << "Count\n";
     shellsort_ciura_basic(vec);
     for (auto& movie : vec) {
         auto curr = movie_data.find(movie.second);
-        auto offset {unicode_count(string_print(movie.first))};
+        auto title_to_print {string_print(movie.first)};
+        auto offset {unicode_count(title_to_print)};
         cout << setw(8) << movie.second
-             << setw(45+offset) << std::right << string_print(movie.first);
+             << setw(45+offset) << std::right << title_to_print;
         cout << setw(60) << std::right << curr.all_genres();
         cout << setw(10) << curr.ratings() << setw(10) << curr.number_of_ratings;
         cout << std::endl;;
@@ -194,15 +195,16 @@ void Database::print_search(const std::vector<unsigned>& movies) {
     std::cout.precision(6);
     std::cout << std::fixed;
     std::cout << "   ";
-    std::cout << setw(40) << "Movie name"
+    std::cout << setw(41) << "Movie name"
               << "  " << setw(70) << "Genres"
               << "  "
               << setw(8) << "Rating"
               << "  " << setw(8) << "Count\n";
     for (auto& m : movies) {
         auto curr{movie_data.find(m)};
-        auto offset {unicode_count(string_print(curr.name))};
-        std::cout << "   " << setw(41+offset) << std::right << string_print(curr.name) << "  " << std::flush;
+        auto title_to_print {string_print(curr.name)};
+        auto offset {unicode_count(title_to_print)};
+        std::cout << "   " << setw(41+offset) << std::right << title_to_print << "  " << std::flush;
         std::cout << setw(70) << curr.all_genres() << "  " << setw(7) << curr.ratings() << "  " << setw(7) << curr.number_of_ratings << std::endl;
     }
 }
