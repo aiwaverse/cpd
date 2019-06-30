@@ -121,7 +121,7 @@ void Database::search_word(std::string& s) {
     print_search(movie_names.infos());
 }
 
-void Database::search_user(unsigned id) {
+void Database::search_user(int id) {
     using std::left;
     using std::right;
     using std::setw;
@@ -143,9 +143,9 @@ void Database::search_user(unsigned id) {
     }
 }
 
-void Database::search_top(const std::string& genre, unsigned n) {
-    std::priority_queue<std::pair<double, unsigned>> top_movies{};
-    for (unsigned i{}; i < 131262; ++i) {
+void Database::search_top(const std::string& genre, int n) {
+    std::priority_queue<std::pair<double, int>> top_movies{};
+    for (int i{}; i < 131262; ++i) {
         auto curr_movie = movie_data.find(i);
         std::string temp{};
         for (auto each : curr_movie.genres)
@@ -158,7 +158,7 @@ void Database::search_top(const std::string& genre, unsigned n) {
         }
     }
     int i{};
-    std::vector<unsigned> movies_to_send{};
+    std::vector<int> movies_to_send{};
     while (not top_movies.empty() and i < n) {
         movies_to_send.push_back(top_movies.top().second);
         top_movies.pop();
@@ -167,7 +167,7 @@ void Database::search_top(const std::string& genre, unsigned n) {
     print_search(movies_to_send);
 }
 
-void Database::print_search(std::vector<std::pair<std::string, unsigned>> vec) {
+void Database::print_search(std::vector<std::pair<std::string, int>> vec) {
     using std::cout;
     using std::setw;
     std::cout.precision(6);
@@ -190,7 +190,7 @@ void Database::print_search(std::vector<std::pair<std::string, unsigned>> vec) {
     }
 }
 
-void Database::print_search(const std::vector<unsigned>& movies) {
+void Database::print_search(const std::vector<int>& movies) {
     using std::setw;
     std::cout.precision(6);
     std::cout << std::fixed;
@@ -213,8 +213,8 @@ void Database::search_tag(const std::vector<std::string>& tags) {
     //get the first set of tags and sort them
     auto m1 = movie_tags.find(tags.at(0));
     shellsort_ciura_basic(m1);
-    std::vector<unsigned> m2{};
-    for (unsigned i{1}; i < tags.size(); ++i) {
+    std::vector<int> m2{};
+    for (size_t i{1}; i < tags.size(); ++i) {
         //gets a new set of tags, sort them, and finds the insersection with the current tag set
         auto m3 = movie_tags.find(tags.at(i));
         shellsort_ciura_basic(m3);
@@ -245,11 +245,11 @@ int unicode_count(const std::string& s){
     return s.size()-new_s.size();
 }
 
-std::string parse_line(const std::string& s, unsigned info) {
+std::string parse_line(const std::string& s, int info) {
     //in the end this is only used once, because it's innefficient to do regularly, aside from not working with sensitive strings
     std::stringstream iss{s};
     std::string extracted{};
-    unsigned i{};
+    int i{};
     while (i < info and std::getline(iss, extracted, ',')) {
         ++i;
     }

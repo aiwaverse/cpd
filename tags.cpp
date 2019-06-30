@@ -15,18 +15,18 @@ size_t Hash_Table::mapping(const std::string& s) {
     return hash;
 }
 //probing functions
-size_t Hash_Table::double_probing(size_t c, const unsigned i) {
+size_t Hash_Table::double_probing(size_t c, const int i) {
     return c + i * (29 - (c % 7));
 }
 
-bool Hash_Table::test_for_tag(size_t pos, unsigned id) {
+bool Hash_Table::test_for_tag(size_t pos, int id) {
     auto find_result = std::find(table[pos]._movies.begin(), table[pos]._movies.end(), id);
     if (find_result != table[pos]._movies.end())
         return true;
     return false;
 }
 
-bool Hash_Table::insert(std::string s, unsigned id) {
+bool Hash_Table::insert(std::string s, int id) {
     size_t i{0};
     size_t key{mapping(s)};
     auto o_key{key};
@@ -54,7 +54,7 @@ bool Hash_Table::insert(std::string s, unsigned id) {
     return true;
 }
 
-std::vector<unsigned> Hash_Table::find(const std::string& s) {
+std::vector<int> Hash_Table::find(const std::string& s) {
     size_t i{0};
     size_t key{mapping(s)};
     auto o_key{key};

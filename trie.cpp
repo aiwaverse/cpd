@@ -48,11 +48,11 @@ void basic_node::cycle_array(void) {
     }
 }
 
-void basic_node::insert(std::string& original, unsigned id) {
+void basic_node::insert(std::string& original, int id) {
     std::string new_s{transform_string(original)};
     _insert(new_s, original, id);
 }
-void basic_node::_insert(std::string& modified, const std::string& original, unsigned id) {
+void basic_node::_insert(std::string& modified, const std::string& original, int id) {
     int c{convert_c(modified.at(0))};
     if (modified.length() > 1) {
         //there's more to destroy 
@@ -70,7 +70,7 @@ void basic_node::_insert(std::string& modified, const std::string& original, uns
         return;
     }
 }
-void leaf_node::_insert(std::string& modified, const std::string& original, unsigned id) {
+void leaf_node::_insert(std::string& modified, const std::string& original, int id) {
     word = original;
     user_id = id;
     is_word = true;

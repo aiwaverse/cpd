@@ -39,7 +39,7 @@ void choose_query(const std::string& first, const std::string& line, Database& o
 void title_query(const std::string& title, Database& obj) {
     obj.search_word(const_cast<std::string&>(title));
 }
-void topN_query(const std::string& genre, unsigned n, Database& obj) {
+void topN_query(const std::string& genre, int n, Database& obj) {
     std::istringstream iss{genre};
     std::string token{};
     while (iss >> std::quoted(token, '\'')) {

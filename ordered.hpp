@@ -5,7 +5,7 @@
 namespace ordered {
 struct User_data {
     //pair of id and rating
-    std::vector<std::pair<unsigned, double>> movie_ratings{};
+    std::vector<std::pair<int, double>> movie_ratings{};
 };
 
 class Users {
@@ -15,6 +15,6 @@ class Users {
 
    public:
     User_data find(size_t user) { return users_info.at(user - 1); };
-    void insert(size_t user, unsigned movie_id, double rating) { users_info[user - 1].movie_ratings.push_back({movie_id, rating}); };
+    void insert(size_t user, int movie_id, double rating) { users_info[user - 1].movie_ratings.push_back({movie_id, rating}); };
 };
 }  // namespace ordered

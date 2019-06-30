@@ -20,16 +20,16 @@ class Database {
     Database(std::string file_name = default_ratings_file);
     void search_word(std::string& s);
     void search_tag(const std::string&);
-    void print_search(std::vector<std::pair<std::string, unsigned>>);
-    void print_search(const std::vector<unsigned>&);
-    void search_user(unsigned id);
+    void print_search(std::vector<std::pair<std::string, int>>);
+    void print_search(const std::vector<int>&);
+    void search_user(int id);
     void search_tag(const std::vector<std::string>&);
-    void search_top(const std::string&, unsigned);
+    void search_top(const std::string&, int);
 
 };
 std::string parse_genres(std::string& s);
 std::string parse_quoted_line(std::string& s);
-std::string parse_line(const std::string& s, unsigned info);
+std::string parse_line(const std::string& s, int info);
 void clear_buffer(void);
 std::string unquote( const std::string& s );
 std::vector<std::string> make_string_vector(const std::string& s);

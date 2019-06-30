@@ -7,7 +7,7 @@
 namespace trie {
 class basic_node {
    private:
-    static std::vector<std::pair<std::string, unsigned>> _infos;
+    static std::vector<std::pair<std::string, int>> _infos;
 
    protected:
     std::array<std::unique_ptr<basic_node>, 36> next_nodes{};
@@ -20,22 +20,22 @@ class basic_node {
     void cycle_array(void);
     void find(std::string&);
     void _find(std::string& modified);
-    void insert(std::string& word, unsigned id);
+    void insert(std::string& word, int id);
     void clear(void) { _infos.clear(); };
-    std::vector<std::pair<std::string, unsigned>> infos(void) { return _infos; };
-    virtual void _insert(std::string& modified, const std::string& original, unsigned id);
+    std::vector<std::pair<std::string, int>> infos(void) { return _infos; };
+    virtual void _insert(std::string& modified, const std::string& original, int id);
     virtual ~basic_node(){};
 };
 class leaf_node : public basic_node {
    protected:
-    void _insert(std::string& modified, const std::string& original, unsigned id) override;
+    void _insert(std::string& modified, const std::string& original, int id) override;
 
    public:
     std::string word{};
-    unsigned user_id{};
+    int user_id{};
     leaf_node(){};
     virtual ~leaf_node(){};
 };
 std::string transform_string(std::string);
-inline std::vector<std::pair<std::string, unsigned>> basic_node::_infos{};  //static member initialization
+inline std::vector<std::pair<std::string, int>> basic_node::_infos{};  //static member initialization
 }  // namespace trie

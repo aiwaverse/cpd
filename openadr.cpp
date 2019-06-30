@@ -1,20 +1,20 @@
 #include "openadr.hpp"
 namespace open {
 //probing functions
-size_t Hash_Table::double_probing(size_t c, const unsigned i) {
+size_t Hash_Table::double_probing(size_t c, const int i) {
     return c + i * (29 - (c % 7));
     //return c + (i*i);
 }
-size_t Hash_Table::linear_probing(size_t c, const unsigned i) {
+size_t Hash_Table::linear_probing(size_t c, const int i) {
     return c + i;
 }
-unsigned Hash_Table::hash(unsigned x) {
+size_t Hash_Table::hash(size_t x) {
     x = ((x >> 16) ^ x) * 0x45d9f3b;
     x = ((x >> 16) ^ x) * 0x45d9f3b;
     x = (x >> 16) ^ x;
     return x;
 }
-unsigned Hash_Table::unhash(unsigned x) {
+size_t Hash_Table::unhash(size_t x) {
     x = ((x >> 16) ^ x) * 0x119de1f3;
     x = ((x >> 16) ^ x) * 0x119de1f3;
     x = (x >> 16) ^ x;

@@ -9,14 +9,12 @@
 
 //please compile with the -O3 flag, if you're insane use gcc, but this was made on clang
 
-int main(int argc, char* argv[]) {
+int main(void) {
     Database movies{};
     std::string query{};
     do {
         std::cout << "Welcome to the Movie Lens Database, please enter your query or type help for the command list:\n";
         std::cin >> query;
-        //this "cleans the screen" (actually it just scrolls a bit, still works)
-        //std::cout << "\033[2J\033[1;1H";
         clear();
         std::cout << "======================================================================================================================================\n";
         std::string info{};
