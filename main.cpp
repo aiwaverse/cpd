@@ -7,7 +7,7 @@
 #include "tags.hpp"
 #include "clear.hpp"
 
-//please compile with the -O3 flag, if you're insane use gcc, but this was made on clang
+//please compile with the -O3 flag, if you're insane use gcc, but this was made on clang++
 
 int main(void) {
     Database movies{};
