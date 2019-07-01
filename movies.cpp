@@ -205,7 +205,7 @@ void Database::print_search(const std::vector<int>& movies) {
         auto title_to_print {string_print(curr.name)};
         auto offset {unicode_count(title_to_print)};
         std::cout << "   " << setw(41+offset) << std::right << title_to_print << "  " << std::flush;
-        std::cout << setw(70) << curr.all_genres() << "  " << setw(7) << curr.ratings() << "  " << setw(7) << curr.number_of_ratings << std::endl;
+        std::cout << setw(70) << curr.all_genres() << "  " << setw(7) << curr.ratings() << "  " << setw(6) << curr.number_of_ratings << std::endl;
     }
 }
 
