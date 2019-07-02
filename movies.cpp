@@ -125,21 +125,20 @@ void Database::search_user(int id) {
     using std::left;
     using std::right;
     using std::setw;
+    //call the ordered array
     auto find_result{ratings.find(id)};
-    std::cout << setw(11) << "user_rating"
-              << "   " << setw(42) << "movie names   " << setw(12) << "global rating"
-              << "   " << setw(4) << "count\n";
+    std::cout << setw(12) << " User Rating"
+              << "   " << setw(62) << "Movie Names   " << setw(34) << "Global Rating"
+              << "   " << setw(17) << "Count\n";
+    //user the hash table to print the remaider with the id
     for (auto entry : find_result.movie_ratings) {
         auto movie{movie_data.find(entry.first)};
         std::cout.precision(1);
         std::cout << std::fixed;
         auto offset {unicode_count(string_print(movie.name))};
-        std::cout << setw(11) << entry.second << "  " << setw(40+offset) << string_print(movie.name) << "  ";
-        auto grade{movie.all_ratings / movie.number_of_ratings};
-        if (movie.number_of_ratings == 0)
-            grade = 0;
+        std::cout << setw(12) << entry.second << "  " << setw(60+offset) << string_print(movie.name) << "  ";
         std::cout.precision(6);
-        std::cout << std::fixed << setw(13) << grade << "  " << setw(7) << movie.number_of_ratings << "\n";
+        std::cout << std::fixed << setw(35) << movie.ratings() << "  " << setw(17) << movie.number_of_ratings << "\n";
     }
 }
 
@@ -152,7 +151,7 @@ void Database::search_top(const std::string& genre, int n) {
             temp += (each) + " ";
         std::string genres_low{};
         std::transform(temp.begin(), temp.end(), std::back_inserter(genres_low), ::tolower);
-        if ((curr_movie.number_of_ratings >= 20) and (genres_low.find(genre) != std::string::npos)) {
+        if ((curr_movie.number_of_ratings >= 1000) and (genres_low.find(genre) != std::string::npos)) {
             auto curr_grade = curr_movie.all_ratings / curr_movie.number_of_ratings;
             top_movies.push(std::make_pair(curr_grade, i));
         }
@@ -173,7 +172,7 @@ void Database::print_search(std::vector<std::pair<std::string, int>> vec) {
     std::cout.precision(6);
     std::cout << std::fixed;
     cout << setw(8) << "ID"
-         << " " << setw(44) << std::right << "Movie name"
+         << " " << setw(44) << std::right << "Movie Name"
          << "  " << setw(58) << std::right << "Genres"
          << " " << setw(9) << "Rating"
          << " " << setw(10) << "Count\n";
@@ -204,8 +203,8 @@ void Database::print_search(const std::vector<int>& movies) {
         auto curr{movie_data.find(m)};
         auto title_to_print {string_print(curr.name)};
         auto offset {unicode_count(title_to_print)};
-        std::cout << "   " << setw(41+offset) << std::right << title_to_print << "  " << std::flush;
-        std::cout << setw(65) << curr.all_genres() << "  " << setw(10) << curr.ratings() << "  " << setw(7) << curr.number_of_ratings << std::endl;
+        std::cout << "   " << setw(41+offset) << std::right << title_to_print << "  ";
+        std::cout << setw(65) << curr.all_genres() << "  " << setw(10) << curr.ratings() << "  " << setw(7) << curr.number_of_ratings << "\n";
     }
 }
 
